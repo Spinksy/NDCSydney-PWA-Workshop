@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Options;
 using NDC.Workshop.Server.Configuration;
+using NDC.Workshop.Server.Models;
 
 namespace NDC.Workshop.Server.Controllers
 {
