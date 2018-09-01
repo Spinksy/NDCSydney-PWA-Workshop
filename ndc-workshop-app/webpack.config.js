@@ -4,7 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: './src/shell.js'},
+        app: './src/components/shell.js'},
     output: {
         filename: '[name].bundle.js',
         chunkFilename: '[name].bundle.js',
