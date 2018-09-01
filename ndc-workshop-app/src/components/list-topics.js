@@ -1,41 +1,41 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import '@polymer/paper-card/paper-card.js';
-import '@polymer/paper-styles/typography.js';
-import '@polymer/paper-styles/color.js';
-import '@polymer/polymer/lib/elements/dom-repeat.js';
-import '@polymer/paper-spinner/paper-spinner.js';
+import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
+import "@polymer/paper-card/paper-card.js";
+import "@polymer/paper-styles/typography.js";
+import "@polymer/paper-styles/color.js";
+import "@polymer/polymer/lib/elements/dom-repeat.js";
+import "@polymer/paper-spinner/paper-spinner.js";
 /**
  * `list-topics` Description
  *
  * @customElement
  * @polymer
  * @demo
- * 
+ *
  */
 class ListTopics extends PolymerElement {
-    static get properties() {
-        return {
-            topics:{
-                type: Array
-            },
-             refresh: {
-                 type: Boolean,
-                 value: false,
-                 observer: "_reloadData"
-             },
-             _loadCompleted:{
-                 type: Boolean,
-                 value: false
-             },
-             _noTopics: {
-                 type: Boolean,
-                 value: true
-             }
-        }
-    }
+  static get properties() {
+    return {
+      topics: {
+        type: Array
+      },
+      refresh: {
+        type: Boolean,
+        value: false,
+        observer: "_reloadData"
+      },
+      _loadCompleted: {
+        type: Boolean,
+        value: false
+      },
+      _noTopics: {
+        type: Boolean,
+        value: true
+      }
+    };
+  }
 
-    static get template() {
-        return html`
+  static get template() {
+    return html`
  <style>
             :host {
                 display: flex;
@@ -110,65 +110,67 @@ class ListTopics extends PolymerElement {
                     </div>
                     </div>
                 </paper-card>
+            </template>
+            <template is="dom-if" if="[[!_loadCompleted]]">
+              <paper-spinner alt="Loading topics" active></paper-spinner>
+            </template>
         `;
-    }
+  }
 
-    /**
-     * Instance of the element is created/upgraded. Use: initializing state,
-     * set up event listeners, create shadow dom.
-     * @constructor
-     */
-    constructor() {
-        super();
-    }
+  /**
+   * Instance of the element is created/upgraded. Use: initializing state,
+   * set up event listeners, create shadow dom.
+   * @constructor
+   */
+  constructor() {
+    super();
+  }
 
-    /**
-     * Use for one-time configuration of your component after local
-     * DOM is initialized.
-     */
-    ready() {
-        super.ready();
-    }
+  /**
+   * Use for one-time configuration of your component after local
+   * DOM is initialized.
+   */
+  ready() {
+    super.ready();
+  }
 
-    __getList(){
-        this._loadCompleted = false;
-        this._noTopics = false;
-        const baseUrl = window.location.origin;
-        const apiEndpoint = `${baseUrl}/api/topics`;
-        return fetch(apiEndpoint,)
-            .then(response =>{
-                if(response.ok){
-                    return response.json()
-                    .then(data => {
-                        this._loadCompleted = true;
-                        this.topics =  data;
-                    });
-                }
-                else{
-                    console.error(`${response.status}: ${response.statusText}`);
-                    this._loadCompleted = true;
-                    this._noTopics = true;
-                }
-
-            })
-            .catch(err => {
-                console.error(err);
-                this._loadCompleted = true;
-                this._noTopics = true;
-            });
-    }
-
-        _reloadData(){
-            if (this.refresh){
-                this.__getList()
-                    .then(e =>{
-                        console.log("Data refreshed");
-                        let newEvent = new CustomEvent('loaded',{ bubbles:true, composed: true});
-                        this.dispatchEvent(newEvent);
-                    });
-            }
+  __getList() {
+    this._loadCompleted = false;
+    this._noTopics = false;
+    const baseUrl = window.location.origin;
+    const apiEndpoint = `${baseUrl}/api/topics`;
+    return fetch(apiEndpoint)
+      .then(response => {
+        if (response.ok) {
+          return response.json().then(data => {
+            this._loadCompleted = true;
+            this.topics = data;
+          });
+        } else {
+          console.error(`${response.status}: ${response.statusText}`);
+          this._loadCompleted = true;
+          this._noTopics = true;
         }
+      })
+      .catch(err => {
+        console.error(err);
+        this._loadCompleted = true;
+        this._noTopics = true;
+      });
+  }
 
+  _reloadData() {
+    if (this.refresh) {
+      this.__getList().then(e => {
+        console.log("Data refreshed");
+        let newEvent = new CustomEvent("loaded", {
+          bubbles: true,
+          composed: true
+        });
+        this.dispatchEvent(newEvent);
+      });
+    }
+  }
 }
 
-customElements.define('list-topics', ListTopics);
+customElements.define("list-topics", ListTopics);

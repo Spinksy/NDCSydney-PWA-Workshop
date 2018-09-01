@@ -31,6 +31,9 @@ class Shell extends PolymerElement {
         reflectToAttribute: true,
         observer: "_pageChanged"
       },
+      previousPage: {
+        type: String
+      },
       refreshData: {
         type: Boolean,
         value: false
@@ -112,7 +115,6 @@ text-align: center;
   }
 
   _routePageChanged(page) {
-    console.log(page);
     if (!page) {
       this.page = "launch";
     } else if (["launch", "list","add"].indexOf(page) !== -1) {
@@ -120,8 +122,11 @@ text-align: center;
     }
   }
 
-  _pageChanged(page) {
-    console.log(page);
+  _pageChanged(page, oldPage) {
+    
+    if(oldPage !== undefined){
+      this.previousPage = oldPage;
+  }
     switch (page) {
       case "launch":
         import(/* webpackChunkName: "launch-page" */ "./launch-page");
@@ -134,7 +139,21 @@ text-align: center;
         import(/* webpackChunkName: "add-topic" */ "./add-topic");
         break;
     }
+    this._disableBackButton();
   }
+
+  _disableBackButton(){
+    if (this.page === 'launch' || this.page === 'app404'|| this.page === undefined){
+        this.$.backButton.disabled = true;
+    }else{
+        this.$.backButton.disabled = false;
+    }
+ }
+ _goBack(){
+         if(this.previousPage !== undefined){
+             this.page = this.previousPage;
+         }
+    }
 
   _onSelected(e) {
     e.cancelBubble = true;
