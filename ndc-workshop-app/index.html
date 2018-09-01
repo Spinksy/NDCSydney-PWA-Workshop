@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>ndc-workshop</title>
+    <meta name="description" content="Simple application for NDC PWA Workshop">
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
+    <style>
+      body {
+        margin: 0;
+        font-family: "Roboto", "Noto", sans-serif;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #eeeeee;
+      }
+    </style>
+<script>
+window.AppGlobals = {rootPath: '/'};
+</script>
+    <!-- <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> -->
+
+    <script type="module" src="<%= htmlWebpackPlugin.files.js[0] %>" crossorigin></script>
+    <!-- <script>
+        if ('serviceWorker' in navigator){
+           navigator.serviceWorker.register('/sw.js',{scope: '/'})
+             .then(registration =>{
+                console.log('ServiceWorker is registered with scope: ',    
+                   registration.scope);
+            },
+              err =>{
+                console.log('serviceWorker failed to register: ',err);
+               }
+            )
+        }
+      </script> -->
+      
+  </head>
+  <body>
+    <app-shell></app-shell>
+
+    <noscript>
+        
+    </noscript>
+  </body>
+</html>

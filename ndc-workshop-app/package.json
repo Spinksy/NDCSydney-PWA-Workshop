@@ -1,0 +1,35 @@
+{
+  "name": "ndc-workshop-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "http-server dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@polymer/app-layout": "^3.0.0-pre.25",
+    "@polymer/app-route": "^3.0.0-pre.25",
+    "@polymer/iron-icons": "^3.0.0-pre.25",
+    "@polymer/iron-pages": "^3.0.0-pre.25",
+    "@polymer/lit-element": "^0.5.2",
+    "@polymer/paper-button": "^3.0.0-pre.25",
+    "@polymer/paper-card": "^3.0.0-pre.25",
+    "@polymer/paper-icon-button": "^3.0.0-pre.25",
+    "@polymer/paper-input": "^3.0.0-pre.25",
+    "@polymer/paper-spinner": "^3.0.0-pre.25",
+    "@polymer/paper-styles": "^3.0.0-pre.25",
+    "@polymer/polymer": "^3.0.5"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.19",
+    "copy-webpack-plugin": "^4.5.2",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
+  }
+}
