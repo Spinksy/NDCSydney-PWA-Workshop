@@ -235,6 +235,7 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 
-**/wwwroot/**/*.js
+wwwroot/
+
 
 /node_modules
