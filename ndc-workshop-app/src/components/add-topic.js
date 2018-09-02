@@ -27,7 +27,7 @@ class AddTopic extends PolymerElement {
             {type: String,
             reflectToAttribute: true
             },
-            _userMessage: String,
+            _userMessage: String
         }
     }
 
@@ -84,8 +84,8 @@ class AddTopic extends PolymerElement {
                 background-color: var( --paper-deep-purple-700);
             }
            
-        #saveToast{
-            --paper-toast-background-color: var(-paper-green-a700) ;
+        .save-toast{
+            --paper-toast-background-color: var(--paper-green-a700) ;
         }
            
 </style>
@@ -99,7 +99,7 @@ class AddTopic extends PolymerElement {
         <paper-button raised on-tap="_submitTopic" class="purple">Submit</paper-button>
         </div>
         </paper-card>
-        <paper-toast raised id="saveToast" class="fit-bottom">[[_userMessage]]</paper-toast>
+        <paper-toast raised id="saveToast" >[[_userMessage]]</paper-toast>
         `;
     }
 
@@ -129,6 +129,8 @@ class AddTopic extends PolymerElement {
         this.topicService.postTopic(topic)
             .then( response => {
                 this._userMessage = `topic "${this.title}" saved`;
+                this.$.saveToast.classList.add('fit-bottom');
+                this.$.saveToast.classList.add('save-toast');
                 this.$.saveToast.open();
                 this.title = "";
                 this.text = "";
