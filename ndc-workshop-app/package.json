@@ -24,7 +24,8 @@
     "@polymer/paper-spinner": "^3.0.0-pre.25",
     "@polymer/paper-styles": "^3.0.0-pre.25",
     "@polymer/paper-toast": "^3.0.0-pre.25",
-    "@polymer/polymer": "^3.0.5"
+    "@polymer/polymer": "^3.0.5",
+    "moment": "^2.22.2"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^2.1.1",

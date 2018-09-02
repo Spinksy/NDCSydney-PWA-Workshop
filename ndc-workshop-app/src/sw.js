@@ -1,12 +1,17 @@
-var cache_name = "workshop_v1.3";
+var cache_name = "workshop_v1.4";
 var urlsToCache =[
     ".",
     "index.html",
     "app.bundle.js",
-    "launch-page.bundle.js"
+    "launch-page.bundle.js",
+    "add-topic.bundle.js",
+    "list-topics.bundle.js",
+    "app-404.bundle.js",
+    "https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic"
 ];
 
 self.addEventListener('install',event =>{
+    self.skipWaiting();
     console.log('called service worker install');
     event.waitUntil(async function() {
         const cache = await caches.open(cache_name);
@@ -16,6 +21,7 @@ self.addEventListener('install',event =>{
 
 //fetch
 self.addEventListener('fetch', function(event) {
+    if(event.request.method === 'GET' || event.request.mode === 'navigate')
     event.respondWith(cacheThenNetwork(event.request));
   });
   

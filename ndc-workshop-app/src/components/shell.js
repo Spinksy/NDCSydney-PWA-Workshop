@@ -97,6 +97,7 @@ text-align: center;
             <launch-page name="launch" on-selected="_onSelected"></launch-page>
             <list-topics id="list" name="list" refresh="[[refreshData]]" on-loaded="_onLoadCompleted"></list-topics>
             <add-topic name="add"></add-topic>
+            <app-404 name="404"></app-404>
         </iron-pages>
         
         </app-header-layout>
@@ -119,6 +120,8 @@ text-align: center;
       this.page = "launch";
     } else if (["launch", "list","add"].indexOf(page) !== -1) {
       this.page = page;
+    } else{
+      this.page = "404";
     }
   }
 
@@ -138,6 +141,8 @@ text-align: center;
       case "add":
         import(/* webpackChunkName: "add-topic" */ "./add-topic");
         break;
+      case "404":
+        import(/* webpackChunkName: "app-404" */ "./app-404");
     }
     this._disableBackButton();
   }
@@ -152,6 +157,8 @@ text-align: center;
  _goBack(){
          if(this.previousPage !== undefined){
              this.page = this.previousPage;
+         }else{
+           this.page = "launch";
          }
     }
 
