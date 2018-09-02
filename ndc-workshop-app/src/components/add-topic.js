@@ -4,7 +4,10 @@ import '@polymer/paper-styles/typography.js';
 import '@polymer/paper-styles/color.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-input/paper-textarea.js';
+import '@polymer/paper-card/paper-card';
 import '@polymer/paper-button/paper-button';
+import '@polymer/paper-toast';
+import { TopicService } from '../services/topics-service';
 /**
  * `add-topic` Description
  *
@@ -36,16 +39,38 @@ class AddTopic extends PolymerElement {
                 flex-flow: column;
                 margin: 10px;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: center;
+               
+            
             }
+
+            paper-card {
+                width: 70%;
+            }
+
+            .card-title {
+                @apply( --paper-font-headline);
+              
+            
+            }
+            .card-title{
+                border-bottom: 1px solid lightgray;
+                padding-bottom: 10px;
+                margin-bottom: 5px;
+                text-align: center;
+            }
+           
              paper-button{
                 width: 90%;
                 margin-top: 30px;
                 margin-bottom: 30px;
+                float: right;
             }
             paper-button.purple{
                 background-color: var( --paper-deep-purple-800);
                 color: white;
+                
+                width: 120px;
             }
             paper-textarea{
                  width: 90%;
@@ -81,13 +106,15 @@ class AddTopic extends PolymerElement {
                 }
            
 </style>
-<h2>Add topic</h2>
-     
+
+    <paper-card>
+        <div class="card-content">
+            <div class="card-title">Add Topic</div>
        <paper-input value={{title}} label="Title"></paper-input>
        <paper-textarea  label="Content" rows="1"   value={{text}} max-rows="10"></paper-textarea>
-
-    
         <paper-button raised on-tap="_submitTopic" class="purple">Submit</paper-button>
+            </div>
+            </paper-card>
          <div id="messageEl" class="userMessage" hidden="hidden">
              <p>[[_userMessage]]</p></div>
         `;
@@ -100,6 +127,7 @@ class AddTopic extends PolymerElement {
      */
     constructor() {
         super();
+        this.topicService = new TopicService();
     }
 
     /**
@@ -108,6 +136,18 @@ class AddTopic extends PolymerElement {
      */
     ready() {
         super.ready();
+    }
+
+    _submitTopic(){
+        const topic = {
+            title: this.title,
+            text: this.text
+        };
+        this.topicService.postTopic(topic)
+            .then( response => {
+                console.log(response);
+            });
+
     }
 }
 

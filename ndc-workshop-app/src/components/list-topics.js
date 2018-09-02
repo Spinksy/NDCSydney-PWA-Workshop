@@ -45,6 +45,7 @@ class ListTopics extends PolymerElement {
                 align-items: center;
                 justify-content: center;
 
+
             }
             paper-card {
                margin-bottom: 10px;
@@ -80,6 +81,10 @@ class ListTopics extends PolymerElement {
       }
       .card-content{
           padding: 8px;
+      }
+      paper-card {
+          max-width: 500px;
+          min-height: 100px;
       }
     paper-spinner{
         margin-top: 200px;
