@@ -4,7 +4,8 @@ import "@polymer/paper-styles/typography.js";
 import "@polymer/paper-styles/color.js";
 import "@polymer/polymer/lib/elements/dom-repeat.js";
 import "@polymer/paper-spinner/paper-spinner.js";
-/**
+import {TopicService} from '../services/topics-service';
+/*
  * `list-topics` Description
  *
  * @customElement
@@ -137,21 +138,12 @@ class ListTopics extends PolymerElement {
   __getList() {
     this._loadCompleted = false;
     this._noTopics = false;
-    const baseUrl = window.location.origin;
-    const apiEndpoint = `${baseUrl}/api/topics`;
-    return fetch(apiEndpoint)
-      .then(response => {
-        if (response.ok) {
-          return response.json().then(data => {
-            this._loadCompleted = true;
+  const service = new TopicService();
+    return service.getTopics()
+            .then (data =>{
+                this._loadCompleted = true;
             this.topics = data;
-          });
-        } else {
-          console.error(`${response.status}: ${response.statusText}`);
-          this._loadCompleted = true;
-          this._noTopics = true;
-        }
-      })
+            }) 
       .catch(err => {
         console.error(err);
         this._loadCompleted = true;

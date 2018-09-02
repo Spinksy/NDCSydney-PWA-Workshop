@@ -12,6 +12,7 @@ module.exports = {
 
 
     },
+    devtool: "eval-source-map",
     mode: 'development',
     plugins: [
         new CleanWebpackPlugin(),
