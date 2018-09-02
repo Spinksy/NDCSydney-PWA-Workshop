@@ -33,15 +33,14 @@ class AddTopic extends PolymerElement {
 
     static get template() {
         return html`
-        <style>
+        <custom-style>
+        <style is="custom-style">
             :host {
                 display: flex;
                 flex-flow: column;
                 margin: 10px;
                 align-items: center;
                 justify-content: center;
-               
-            
             }
 
             paper-card {
@@ -50,8 +49,6 @@ class AddTopic extends PolymerElement {
 
             .card-title {
                 @apply( --paper-font-headline);
-              
-            
             }
             .card-title{
                 border-bottom: 1px solid lightgray;
@@ -87,36 +84,22 @@ class AddTopic extends PolymerElement {
                 background-color: var( --paper-deep-purple-700);
             }
            
-            .userMessage{
-                background-color:darkslategray ;
-                
-                color: white;
-                width: 75%;
-                height: 50px;
-                margin-top: 10px;
-                margin-bottom: 10px;
-                text-align: center;
-                align-content: center;
-                
-            }
-            .userMessage > p { 
-                @apply --paper-font-common-base;
-                font-size: 16px;
-               
-                }
+        #saveToast{
+            --paper-toast-background-color: var(-paper-green-a700) ;
+        }
            
 </style>
+</custom-style>
 
-    <paper-card>
-        <div class="card-content">
+    <paper-card >
+        <div class="card-content" id="addCard">
             <div class="card-title">Add Topic</div>
        <paper-input value={{title}} label="Title"></paper-input>
        <paper-textarea  label="Content" rows="1"   value={{text}} max-rows="10"></paper-textarea>
         <paper-button raised on-tap="_submitTopic" class="purple">Submit</paper-button>
-            </div>
-            </paper-card>
-         <div id="messageEl" class="userMessage" hidden="hidden">
-             <p>[[_userMessage]]</p></div>
+        </div>
+        </paper-card>
+        <paper-toast raised id="saveToast" class="fit-bottom">[[_userMessage]]</paper-toast>
         `;
     }
 
@@ -145,7 +128,10 @@ class AddTopic extends PolymerElement {
         };
         this.topicService.postTopic(topic)
             .then( response => {
-                console.log(response);
+                this._userMessage = `topic "${this.title}" saved`;
+                this.$.saveToast.open();
+                this.title = "";
+                this.text = "";
             });
 
     }
