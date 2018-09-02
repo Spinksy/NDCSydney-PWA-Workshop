@@ -85,7 +85,10 @@ class AddTopic extends PolymerElement {
             }
            
         .save-toast{
-            --paper-toast-background-color: var(--paper-green-a700) ;
+            --paper-toast-background-color: var(--paper-green-700) ;
+        }
+        .save-toast-failed {
+            --paper-toast-background-color: var(--paper-amber-700)
         }
            
 </style>
@@ -129,13 +132,25 @@ class AddTopic extends PolymerElement {
         this.topicService.postTopic(topic)
             .then( response => {
                 this._userMessage = `topic "${this.title}" saved`;
-                this.$.saveToast.classList.add('fit-bottom');
-                this.$.saveToast.classList.add('save-toast');
+                this._setToast('failed');
+                
                 this.$.saveToast.open();
                 this.title = "";
                 this.text = "";
             });
 
+    }
+
+    _setToast(status){
+        this.$.saveToast.classList.add('fit-bottom');
+        switch(status){
+            case 'success':
+            this.$.saveToast.classList.add('save-toast');
+            break;
+            case 'failed':
+            this.$.saveToast.classList.add('save-toast-failed');
+            break;
+        }
     }
 }
 
