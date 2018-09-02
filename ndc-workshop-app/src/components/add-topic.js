@@ -1,38 +1,39 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import '@polymer/paper-card/paper-card.js';
-import '@polymer/paper-styles/typography.js';
-import '@polymer/paper-styles/color.js';
-import '@polymer/paper-input/paper-input.js';
-import '@polymer/paper-input/paper-textarea.js';
-import '@polymer/paper-card/paper-card';
-import '@polymer/paper-button/paper-button';
-import '@polymer/paper-toast';
-import { TopicService } from '../services/topics-service';
+import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
+import "@polymer/paper-card/paper-card.js";
+import "@polymer/paper-styles/typography.js";
+import "@polymer/paper-styles/color.js";
+import "@polymer/paper-input/paper-input.js";
+import "@polymer/paper-input/paper-textarea.js";
+import "@polymer/paper-card/paper-card";
+import "@polymer/paper-button/paper-button";
+import "@polymer/paper-toast";
+import { TopicService } from "../services/topics-service";
+import { Store } from "../js/storeClass";
 /**
  * `add-topic` Description
  *
  * @customElement
  * @polymer
  * @demo
- * 
+ *
  */
 class AddTopic extends PolymerElement {
-    static get properties() {
-        return {
-            title: {
-                type: String,
-                reflectToAttribute: true
-            },
-            text:
-            {type: String,
-            reflectToAttribute: true
-            },
-            _userMessage: String
-        }
-    }
+  static get properties() {
+    return {
+      title: {
+        type: String,
+        reflectToAttribute: true
+      },
+      text: {
+        type: String,
+        reflectToAttribute: true
+      },
+      _userMessage: String
+    };
+  }
 
-    static get template() {
-        return html`
+  static get template() {
+    return html`
         <custom-style>
         <style is="custom-style">
             :host {
@@ -87,7 +88,7 @@ class AddTopic extends PolymerElement {
         .save-toast{
             --paper-toast-background-color: var(--paper-green-700) ;
         }
-        .save-toast-failed {
+        .save-toast-pending {
             --paper-toast-background-color: var(--paper-amber-700)
         }
            
@@ -104,54 +105,85 @@ class AddTopic extends PolymerElement {
         </paper-card>
         <paper-toast raised id="saveToast" >[[_userMessage]]</paper-toast>
         `;
-    }
+  }
 
-    /**
-     * Instance of the element is created/upgraded. Use: initializing state,
-     * set up event listeners, create shadow dom.
-     * @constructor
-     */
-    constructor() {
-        super();
-        this.topicService = new TopicService();
-    }
+  /**
+   * Instance of the element is created/upgraded. Use: initializing state,
+   * set up event listeners, create shadow dom.
+   * @constructor
+   */
+  constructor() {
+    super();
+    this.topicService = new TopicService();
+    this.dbStore = new Store();
+  }
 
-    /**
-     * Use for one-time configuration of your component after local
-     * DOM is initialized.
-     */
-    ready() {
-        super.ready();
-    }
+  /**
+   * Use for one-time configuration of your component after local
+   * DOM is initialized.
+   */
+  ready() {
+    super.ready();
+  }
 
-    _submitTopic(){
-        const topic = {
-            title: this.title,
-            text: this.text
-        };
-        this.topicService.postTopic(topic)
-            .then( response => {
-                this._userMessage = `topic "${this.title}" saved`;
-                this._setToast('failed');
-                
-                this.$.saveToast.open();
-                this.title = "";
-                this.text = "";
-            });
-
-    }
-
-    _setToast(status){
-        this.$.saveToast.classList.add('fit-bottom');
-        switch(status){
-            case 'success':
-            this.$.saveToast.classList.add('save-toast');
-            break;
-            case 'failed':
-            this.$.saveToast.classList.add('save-toast-failed');
-            break;
+  _submitTopic() {
+    const topic = {
+      title: this.title,
+      text: this.text
+    };
+    this.topicService
+      .postTopic(topic)
+      .then(response => {
+        if (response.status === 200 || response.status === 201) {
+          this._userMessage = `topic "${this.title}" saved`;
+          this._setToast("success");
+        } else {
+          this._saveToStore(topic).then(r => {
+            this._setToast("pending");
+            this._userMessage = "Topic will be saved later.";
+          });
         }
+        this.$.saveToast.open();
+        this.title = "";
+        this.text = "";
+      })
+      .catch(error => {
+        this._saveToStore(topic).then(r => {
+          this._setToast("pending");
+          this._userMessage = "Topic will be saved later.";
+          this.$.saveToast.open();
+          this.title = "";
+          this.text = "";
+        });
+      });
+  }
+
+  _setToast(status) {
+    this.$.saveToast.classList.add("fit-bottom");
+    switch (status) {
+      case "success":
+        this.$.saveToast.classList.add("save-toast");
+        break;
+      case "pending":
+        this.$.saveToast.classList.add("save-toast-pending");
+        break;
     }
+  }
+
+  _saveToStore(topic) {
+    return navigator.serviceWorker.getRegistration().then(reg => {
+      if ("sync" in reg) {
+        this.dbStore
+          .outbox("readwrite")
+          .then(outbox => {
+            return outbox.put(topic);
+          })
+          .then(() => {
+            return reg.sync.register("outbox");
+          });
+      }
+    });
+  }
 }
 
-customElements.define('add-topic', AddTopic);
+customElements.define("add-topic", AddTopic);

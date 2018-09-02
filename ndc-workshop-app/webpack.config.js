@@ -32,6 +32,11 @@ module.exports = {
                     from: path.resolve(__dirname, 'src/sw.js'),
                     to:''
                 },
+                {
+                    from: path.resolve(__dirname, 'src/js/'),
+                    to:'js'
+                }
+    
                 
             ]
         )

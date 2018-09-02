@@ -1,4 +1,4 @@
-var cache_name = "workshop_v1.4";
+var cache_name = "workshop_v1.5";
 var urlsToCache =[
     ".",
     "index.html",
@@ -9,6 +9,8 @@ var urlsToCache =[
     "app-404.bundle.js",
     "https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic"
 ];
+
+importScripts('js/idb.js', 'js/store.js');
 
 self.addEventListener('install',event =>{
     self.skipWaiting();
