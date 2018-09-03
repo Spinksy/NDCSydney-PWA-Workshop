@@ -21,6 +21,11 @@ self.addEventListener('install',event =>{
     }());
 });
 
+//activate
+self.addEventListener('activate', event =>{
+
+})
+
 //fetch
 self.addEventListener('fetch', function(event) {
     if(event.request.method === 'GET' || event.request.mode === 'navigate')
@@ -60,7 +65,8 @@ self.addEventListener('fetch', function(event) {
 //sync event
 self.addEventListener('sync', event =>{
     event.waitUntil(
-        store.outbox('readwrite')
+        console.log('service worker: sync');
+       return store.outbox('readwrite')
             .then(outbox =>{
                 return outbox.getAll();
             })
