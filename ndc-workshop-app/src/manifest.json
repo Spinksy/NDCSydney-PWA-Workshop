@@ -1,21 +1,19 @@
 {
-    "name": "NDC PWA Workshop App",
-    "short_name": "PWAWorkshopApp",
-    "start_url":"/index.html",
+    "name": "NDC PWA workshop App",
+    "short_name": "NDC PWA workshop App",
     "icons": [
         {
-            "src": "assets/android-chrome-192x192.png",
+            "src": "/android-chrome-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "assets/android-chrome-512x512.png",
+            "src": "/android-chrome-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
         }
     ],
-    "theme_color": "#541a5e",
-    "background_color": "#541a5e",
-    "display": "standalone",
-    "orientation":"any"
+    "theme_color": "#382f8a",
+    "background_color": "#382f8a",
+    "display": "standalone"
 }

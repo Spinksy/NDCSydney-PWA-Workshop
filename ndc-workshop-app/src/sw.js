@@ -1,4 +1,4 @@
-var cache_name = "workshop_v1.5";
+var cache_name = "workshop_v1.6";
 var urlsToCache =[
     ".",
     "index.html",
@@ -23,7 +23,8 @@ self.addEventListener('install',event =>{
 
 //activate
 self.addEventListener('activate', event =>{
-
+    console.log("service worker: activate");
+    event.waitUntil(self.clients.claim());
 })
 
 //fetch
@@ -64,9 +65,9 @@ self.addEventListener('fetch', function(event) {
 
 //sync event
 self.addEventListener('sync', event =>{
+    console.log('service worker: sync');
     event.waitUntil(
-        console.log('service worker: sync');
-       return store.outbox('readwrite')
+       store.outbox('readwrite')
             .then(outbox =>{
                 return outbox.getAll();
             })
