@@ -37,6 +37,7 @@ class LaunchPage extends PolymerElement {
             }
             a {
                 width: 70%;
+                text-align: center;
             }
             paper-button{
                 width: 70%;
