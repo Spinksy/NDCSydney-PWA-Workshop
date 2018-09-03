@@ -35,6 +35,10 @@ module.exports = {
                 {
                     from: path.resolve(__dirname, 'src/js/'),
                     to:'js'
+                },
+                {
+                    from: path.resolve(__dirname, 'src/assets/'),
+                    to:'assets'
                 }
     
                 
