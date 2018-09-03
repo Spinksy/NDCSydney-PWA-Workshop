@@ -82,7 +82,7 @@ namespace NDC.Workshop.Server.Controllers
                 _client.CreateDocumentQuery<Topic>(UriFactory.CreateDocumentCollectionUri(
                         _cosmosConfig.Value.DefaultDb, _cosmosConfig.Value.DefaultCollection)).AsEnumerable()
                     .OrderByDescending(t => t.Date)
-                    .Take(10);
+                    .Take(40);
 
 
             return results.ToList();
