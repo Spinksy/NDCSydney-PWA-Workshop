@@ -5,6 +5,7 @@ import "@polymer/paper-styles/color.js";
 import "@polymer/polymer/lib/elements/dom-repeat.js";
 import "@polymer/paper-spinner/paper-spinner.js";
 import {TopicService} from '../services/topics-service';
+import moment from 'moment/moment';
 /*
  * `list-topics` Description
  *
@@ -112,7 +113,7 @@ class ListTopics extends PolymerElement {
                          [[item.text]]
                          </div>
                      <div class="date">
-                        [[formatDate(item.date)]]
+                        [[_formatDate(item.date)]]
                     </div>
                     </div>
                 </paper-card>
@@ -168,6 +169,10 @@ class ListTopics extends PolymerElement {
       });
     }
   }
+
+  _formatDate(value){
+    return moment(value, moment.ISO_8601).format("DD/MM/YYYY");
+}
 }
 
 customElements.define("list-topics", ListTopics);
