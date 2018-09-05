@@ -10,6 +10,7 @@ namespace NDC.Workshop.Server.Configuration
         public string Url { get; set; }
         public string AuthKey { get; set; }
         public string DefaultDb { get; set; }
-        public string DefaultCollection { get; set; }
+        public string TopicsCollection { get; set; }
+        public string SubscribersCollection { get; set; }
     }
 }

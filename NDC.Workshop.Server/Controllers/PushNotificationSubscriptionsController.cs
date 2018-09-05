@@ -2,9 +2,11 @@
 using Microsoft.Extensions.Options;
 using NDC.Workshop.Server.Models;
 using Newtonsoft.Json;
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
+using NDC.Workshop.Server.Configuration;
 using WebPush;
 
 namespace NDC.Workshop.Server.Controllers
@@ -13,11 +15,15 @@ namespace NDC.Workshop.Server.Controllers
     [ApiController]
     public class PushNotificationSubscriptionsController : ControllerBase
     {
+        private readonly DocumentClient _client;
         private VapidSettings _vapidSettings;
+        private CosmosDbConfiguration _cosmosConfig;
 
-        public PushNotificationSubscriptionsController(IOptions<VapidSettings> vapidSettings)
+        public PushNotificationSubscriptionsController(IOptions<VapidSettings> vapidSettings, IOptions<CosmosDbConfiguration> cosmosDBConfig, DocumentClient client)
         {
+            _client = client;
             _vapidSettings = vapidSettings.Value;
+            _cosmosConfig = cosmosDBConfig.Value;
         }
 
         [HttpPost("api/[controller]")]
@@ -28,10 +34,9 @@ namespace NDC.Workshop.Server.Controllers
                 _vapidSettings.PrivateKey);
 
             var webPushClient = new WebPushClient();
-           
 
-            //todo: store subscription
 
+            await SavePushSubscription(pushSub);
             var payload = new PushNotificationPayload
             {
                 Msg = "Thank you for subscribing",
@@ -46,10 +51,18 @@ namespace NDC.Workshop.Server.Controllers
             catch (WebPushException wpe)
             {
                 var statusCode = wpe.StatusCode;
-                return new StatusCodeResult((int) statusCode);
+                return new StatusCodeResult((int)statusCode);
             }
 
             return new OkResult();
+        }
+
+        private async Task SavePushSubscription(PushSubscription pushSub)
+        {
+            var uri = UriFactory.CreateDocumentCollectionUri(_cosmosConfig.DefaultDb,
+                _cosmosConfig.SubscribersCollection);
+
+            await _client.CreateDocumentAsync(uri, pushSub);
         }
 
         private string GetIconUrl(HttpRequest request, string relativeAssetPath)

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace NDC.Workshop.Server.Controllers
+namespace NDC.Workshop.Server.Models
 {
     public class PushNotificationPayload
     {

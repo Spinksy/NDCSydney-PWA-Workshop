@@ -15,12 +15,12 @@ namespace NDC.Workshop.Server.Controllers
     [ApiController]
     public class TopicsController : ControllerBase
     {
-        private readonly IOptions<CosmosDbConfiguration> _cosmosConfig;
+        private readonly CosmosDbConfiguration _cosmosConfig;
         private readonly DocumentClient _client;
 
         public TopicsController(IOptions<CosmosDbConfiguration> cosmosConfig, DocumentClient client)
         {
-            _cosmosConfig = cosmosConfig;
+            _cosmosConfig = cosmosConfig.Value;
             _client = client;
         }
 
@@ -30,7 +30,7 @@ namespace NDC.Workshop.Server.Controllers
         {
             try
             {
-                var topics = TempGetFromDb();
+                var topics = GetTopicsFromDb();
                 return Ok(topics);
 
             }
@@ -62,8 +62,8 @@ namespace NDC.Workshop.Server.Controllers
                 Date = DateTime.Now
             };
 
-            var uri = UriFactory.CreateDocumentCollectionUri(_cosmosConfig.Value.DefaultDb,
-                _cosmosConfig.Value.DefaultCollection);
+            var uri = UriFactory.CreateDocumentCollectionUri(_cosmosConfig.DefaultDb,
+                _cosmosConfig.TopicsCollection);
             try
             {
                 var savedTopic = await _client.CreateDocumentAsync(uri, topicToAdd);
@@ -76,11 +76,11 @@ namespace NDC.Workshop.Server.Controllers
             }
         }
 
-        private List<Topic> TempGetFromDb()
+        private List<Topic> GetTopicsFromDb()
         {
             var results =
                 _client.CreateDocumentQuery<Topic>(UriFactory.CreateDocumentCollectionUri(
-                        _cosmosConfig.Value.DefaultDb, _cosmosConfig.Value.DefaultCollection)).AsEnumerable()
+                        _cosmosConfig.DefaultDb, _cosmosConfig.TopicsCollection)).AsEnumerable()
                     .OrderByDescending(t => t.Date)
                     .Take(40);
 
