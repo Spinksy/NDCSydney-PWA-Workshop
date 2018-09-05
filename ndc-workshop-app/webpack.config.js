@@ -39,7 +39,17 @@ module.exports = {
                 {
                     from: path.resolve(__dirname, 'src/assets/'),
                     to:'assets'
+                },
+                {
+                    from: path.resolve(__dirname, 'node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js'),
+                    to:'wc'
+                },
+                {
+                    from: path.resolve(__dirname, 'node_modules/@webcomponents/webcomponentsjs/bundles'),
+                    to:'wc/bundles'
                 }
+
+            
     
                 
             ]
