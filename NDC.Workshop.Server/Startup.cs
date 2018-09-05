@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NDC.Workshop.Server.Configuration;
 using NDC.Workshop.Server.Models;
+using NDC.Workshop.Server.Services;
 
 namespace NDC.Workshop.Server
 {
@@ -36,6 +37,7 @@ namespace NDC.Workshop.Server
             services.Configure<VapidSettings>(Configuration.GetSection("VapidSettings"));
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton(new DocumentClient(new Uri(tempConfig["Url"]), tempConfig["AuthKey"]));
+            services.AddSingleton<IPushNotifcationService, PushNotifcationService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
         }

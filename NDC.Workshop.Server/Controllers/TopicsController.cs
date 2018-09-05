@@ -8,6 +8,7 @@ using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Options;
 using NDC.Workshop.Server.Configuration;
 using NDC.Workshop.Server.Models;
+using NDC.Workshop.Server.Services;
 
 namespace NDC.Workshop.Server.Controllers
 {
@@ -17,11 +18,13 @@ namespace NDC.Workshop.Server.Controllers
     {
         private readonly CosmosDbConfiguration _cosmosConfig;
         private readonly DocumentClient _client;
+        private readonly IPushNotifcationService _notifcationService;
 
-        public TopicsController(IOptions<CosmosDbConfiguration> cosmosConfig, DocumentClient client)
+        public TopicsController(IOptions<CosmosDbConfiguration> cosmosConfig, DocumentClient client, IPushNotifcationService notifcationService)
         {
             _cosmosConfig = cosmosConfig.Value;
             _client = client;
+            _notifcationService = notifcationService;
         }
 
         [HttpGet]
@@ -67,6 +70,10 @@ namespace NDC.Workshop.Server.Controllers
             try
             {
                 var savedTopic = await _client.CreateDocumentAsync(uri, topicToAdd);
+
+                var notificationMessage = $"Topic added: {topicToAdd.Title}";
+               await  _notifcationService.SendNotificationToSubscribers(notificationMessage, Request.GetBaseUrl());
+
                 //change to created
                 return Ok();
             }
