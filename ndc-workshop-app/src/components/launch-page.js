@@ -2,6 +2,7 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/paper-styles/color';
 import '@polymer/paper-styles/typography';
 import '@polymer/paper-button/paper-button';
+import {PushNotificationService} from '../services/push-notification-service';
 
 
 /**
@@ -60,6 +61,7 @@ class LaunchPage extends PolymerElement {
         <a href="[[rootPath]]list" class="button">
         <paper-button raised class="purple" data-args="list">View Topics</paper-button>
         </a>
+        <paper-button raised class="purple" on-click="_subscribeForNotifications">Register for Notifcations</paper-button>
         `;
     }
 
@@ -70,6 +72,13 @@ class LaunchPage extends PolymerElement {
      */
     constructor() {
         super();
+    }
+
+    _subscribeForNotifications(){
+        const subscriptionService = new PushNotificationService();
+
+        subscriptionService.unsubscribeFromNotification();
+        subscriptionService.subscribeToPushNotifications();
     }
 
 }

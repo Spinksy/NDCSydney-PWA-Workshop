@@ -15,9 +15,11 @@ importScripts('js/idb.js', 'js/store.js');
 self.addEventListener('install',event =>{
     self.skipWaiting();
     console.log('called service worker install');
-    event.waitUntil(async function() {
-        const cache = await caches.open(cache_name);
-        await cache.addAll(urlsToCache);
+    event.waitUntil(function() {
+       caches.open(cache_name)
+      .then(function(cache) {
+        return cache.addAll(urlsToCache);
+      })
     }());
 });
 
@@ -33,6 +35,23 @@ self.addEventListener('fetch', function(event) {
     event.respondWith(cacheThenNetwork(event.request));
   });
   
+
+  //push
+  self.addEventListener('push', event =>{
+    console.log("Push event");  
+    if (event.data){
+          const payload = event.data.json();
+          const title = 'NDC PWA workshop';
+          const options = {
+              body: payload.msg,
+              icon: payload.icon
+          };
+
+          event.waitUntil(
+              self.registration.showNotification(title, options)
+          );
+      }
+  });
   
   //cache first
   function cacheThenNetwork(request) {
@@ -54,6 +73,9 @@ self.addEventListener('fetch', function(event) {
                         .then(cache =>{
                             cache.put(request.url, response.clone());
                             return response;
+                        })
+                        .catch(error =>{
+                            console.log(`Cache error: ${request.url}`);
                         });
                 });
         })

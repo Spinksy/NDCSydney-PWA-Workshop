@@ -24,6 +24,7 @@
     "@polymer/paper-spinner": "^3.0.0-pre.25",
     "@polymer/paper-styles": "^3.0.0-pre.25",
     "@polymer/paper-toast": "^3.0.0-pre.25",
+    "@polymer/paper-toggle-button": "^3.0.0-pre.25",
     "@polymer/polymer": "^3.0.5",
     "moment": "^2.22.2"
   },
