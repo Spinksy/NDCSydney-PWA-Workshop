@@ -1,6 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import {TopicService} from '../services/topics-service';
-
+import '@polymer/paper-styles/paper-styles';
 import moment from 'moment/moment';
 
 /**
@@ -29,8 +29,7 @@ class ViewTopic extends PolymerElement {
         <style>
             
             :host {
-                display: flex;
-                flex-direction: column;
+               @apply --layout-vertical;
                 background-color: var(--light-theme-background-color);
                 --default-padding: 0.5rem;
                 padding-left: var(--default-padding);
