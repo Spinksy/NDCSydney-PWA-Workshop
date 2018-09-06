@@ -32,6 +32,13 @@ namespace NDC.Workshop.Server.Controllers
             return !result.Item1 ? new StatusCodeResult(result.Item2) : new OkResult();
         }
 
+        [HttpDelete("api/[controller]")]
+        public async Task<IActionResult> DeleteSubscription([FromBody] PushNotificationSubscription subscription)
+        {
+            await _pushNotifcationService.DeleteSubscription(subscription);
+            return new OkResult();
+        }
+
 
 
     }

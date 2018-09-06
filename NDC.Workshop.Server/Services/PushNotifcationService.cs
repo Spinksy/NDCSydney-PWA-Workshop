@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
 using Microsoft.Extensions.Options;
 using NDC.Workshop.Server.Configuration;
 using NDC.Workshop.Server.Models;
@@ -80,6 +82,25 @@ namespace NDC.Workshop.Server.Services
             {
                 return (false, (int) wpe.StatusCode);
             }
+        }
+
+        public async Task DeleteSubscription(PushNotificationSubscription subscriptionToDelete)
+        {
+            var uri = UriFactory.CreateDocumentCollectionUri(_cosmosConfig.DefaultDb,
+                _cosmosConfig.SubscribersCollection);
+
+            
+                var queryString = $"SELECT * FROM c WHERE c.Endpoint = \"{subscriptionToDelete.Endpoint}\"";
+                var currentDoc = _client.CreateDocumentQuery<Document>(uri,
+                        queryString,
+                        new FeedOptions { MaxItemCount = 1 })
+                    .ToList()
+                    .FirstOrDefault();
+                if (currentDoc != null)
+                {
+                    await _client.DeleteDocumentAsync(currentDoc.SelfLink);
+                }
+          
         }
 
         private List<PushSubscription> GetSubscribers()
