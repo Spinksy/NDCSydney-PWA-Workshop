@@ -41,6 +41,7 @@ class Shell extends PolymerElement {
       routeData: Object,
       subroute: Object,
       route: Object
+     
     };
   }
 
@@ -75,6 +76,10 @@ width: 100%;
 text-align: center;
   }
 
+  .subscription-toggle {
+    margin-right: 0.5rem;
+  }
+
 </style>
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
       <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
@@ -88,6 +93,7 @@ text-align: center;
           id="backButton"
           ></paper-icon-button>
           <div id="title" maintitle>NDC PWA Workshop App</div>
+</div>
         </app-toolbar>
       </app-header>
       <iron-pages role="main"
@@ -101,7 +107,6 @@ text-align: center;
         </iron-pages>
         
         </app-header-layout>
-
 
     `;
   }
