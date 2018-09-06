@@ -104,6 +104,7 @@ text-align: center;
             <list-topics id="list" name="list" refresh="[[refreshData]]" on-loaded="_onLoadCompleted"></list-topics>
             <add-topic name="add"></add-topic>
             <app-404 name="404"></app-404>
+            <view-topic name="view"></view-topic>
         </iron-pages>
         
         </app-header-layout>
@@ -123,7 +124,8 @@ text-align: center;
   _routePageChanged(page) {
     if (!page) {
       this.page = "launch";
-    } else if (["launch", "list","add"].indexOf(page) !== -1) {
+      this.set('route.path', '/');
+    } else if (["launch", "list","add","view"].indexOf(page) !== -1) {
       this.page = page;
     } else{
       this.page = "404";
@@ -138,6 +140,7 @@ text-align: center;
     switch (page) {
       case "launch":
         import(/* webpackChunkName: "launch-page" */ "./launch-page");
+        this.set('route.path', '/');
         break;
       case "list":
         this.refreshData = true;
@@ -148,6 +151,11 @@ text-align: center;
         break;
       case "404":
         import(/* webpackChunkName: "app-404" */ "./app-404");
+        break;
+      case "view":
+        import(/* webpackChunkName: "view-topic" */ "./view-topic");
+        break;
+
     }
     this._disableBackButton();
   }

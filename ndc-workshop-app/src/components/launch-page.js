@@ -20,9 +20,9 @@ class LaunchPage extends PolymerElement {
         value: "Register for notifications"
       },
       isSubscribed: {
-          type: Boolean,
-          value: false,
-          observer: '_subscriptionChanged'
+        type: Boolean,
+        value: false,
+        observer: "_subscriptionChanged"
       }
     };
   }
@@ -67,6 +67,18 @@ class LaunchPage extends PolymerElement {
                 background-color: var( --paper-deep-purple-700);
             }
 
+            @media only screen and (max-width: 600px){
+                a {
+                    width: 90%;
+                }
+                a  paper-button {
+                width: 90%;
+                }
+                paper-button {
+                 width: 80%;
+                }
+            }
+
         </style>
         <a href="[[rootPath]]add" class="button">
         <paper-button raised class="purple" data-args="add" >Add New Topic</paper-button>
@@ -99,29 +111,22 @@ class LaunchPage extends PolymerElement {
 
   _subscribeForNotifications() {
     if (this.subscriptionService.isSubscribed) {
-      this.subscriptionService.unsubscribeFromNotification()
-      .then( r =>{
-          this.isSubscribed = this.subscriptionService.isSubscribed;
-      });
-      
-      
-    } else {
-      this.subscriptionService.subscribeToPushNotifications()
-      .then( r =>{
+      this.subscriptionService.unsubscribeFromNotification().then(r => {
         this.isSubscribed = this.subscriptionService.isSubscribed;
       });
-        
+    } else {
+      this.subscriptionService.subscribeToPushNotifications().then(r => {
+        this.isSubscribed = this.subscriptionService.isSubscribed;
+      });
     }
-   
   }
 
-
-  _subscriptionChanged(){
-      if(this.subscriptionService.isSubscribed){
-        this.subscriberButtonText = 'Unsubscribe from notifications';
-      }else{
-        this.subscriberButtonText = 'Subscribe to notifications';
-      }
+  _subscriptionChanged() {
+    if (this.subscriptionService.isSubscribed) {
+      this.subscriberButtonText = "Unsubscribe from notifications";
+    } else {
+      this.subscriberButtonText = "Subscribe to notifications";
+    }
   }
 }
 customElements.define("launch-page", LaunchPage);

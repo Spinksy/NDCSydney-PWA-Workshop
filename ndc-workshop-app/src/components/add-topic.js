@@ -91,6 +91,12 @@ class AddTopic extends PolymerElement {
         .save-toast-pending {
             --paper-toast-background-color: var(--paper-amber-700)
         }
+
+        @media only screen and (max-width: 600px){
+          paper-card {
+                width: 95%;
+            }
+        }
            
 </style>
 </custom-style>
