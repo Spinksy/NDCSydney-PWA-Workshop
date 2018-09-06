@@ -31,4 +31,18 @@ export class TopicService {
         return fetch(this.apiEndpoint, options);
 
     }
+
+    getTopicById(id){
+        if (!id){
+            return Promise.resolve();
+        }
+            return fetch(`${this.apiEndpoint}/${id}`)
+            .then(response => {
+                if(!response.ok) {
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            });
+        
+    }
 }
