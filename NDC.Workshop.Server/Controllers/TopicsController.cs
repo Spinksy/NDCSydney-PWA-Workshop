@@ -44,6 +44,14 @@ namespace NDC.Workshop.Server.Controllers
 
         }
 
+        [HttpGet("{id}", Name ="GetTopicById")]
+        public async Task<IActionResult> GetTopic( string id)
+        {
+            var topic = await GetTopicByIdAsync(id);
+
+            return new OkObjectResult(topic);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddTopic([FromBody] NewTopic newTopic)
         {
@@ -69,10 +77,11 @@ namespace NDC.Workshop.Server.Controllers
                 _cosmosConfig.TopicsCollection);
             try
             {
-                var savedTopic = await _client.CreateDocumentAsync(uri, topicToAdd);
+                var savedDoc = await _client.CreateDocumentAsync(uri, topicToAdd);
+                Topic savedTopic = (dynamic)savedDoc;
 
                 var notificationMessage = $"Topic added: {topicToAdd.Title}";
-               await  _notifcationService.SendNotificationToSubscribers(notificationMessage, Request.GetBaseUrl());
+                await _notifcationService.SendNotificationToSubscribers(notificationMessage, Request.GetBaseUrl());
 
                 //change to created
                 return Ok();
@@ -93,6 +102,15 @@ namespace NDC.Workshop.Server.Controllers
 
 
             return results.ToList();
+        }
+
+        private async Task<Topic> GetTopicByIdAsync(string id)
+        {
+            var uri = UriFactory.CreateDocumentUri(_cosmosConfig.DefaultDb, _cosmosConfig.TopicsCollection, id);
+
+            var topic = await _client.ReadDocumentAsync<Topic>(uri);
+
+            return topic;
         }
     }
 }
