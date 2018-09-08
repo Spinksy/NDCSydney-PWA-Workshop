@@ -32,8 +32,10 @@ self.addEventListener("activate", event => {
 
 //fetch
 self.addEventListener("fetch", function(event) {
+    const requestURL = new URL(event.request.url);
+    console.log('Url:', requestURL);
     //we only want to handle GET request
-    if (event.request.method !== "GET" || event.request.scheme ==='chrome-extension') {
+    if (event.request.method !== "GET" || requestURL.protocol ==='chrome-extension') {
     return;
   }
   if (event.request.method === "GET" || event.request.mode === "navigate")
@@ -57,7 +59,8 @@ self.addEventListener("push", event => {
 
 //cache first
 function cacheThenNetwork(request) {
-  return caches
+    
+    return caches
     .match(request)
     .then(response => {
       if (response) {
