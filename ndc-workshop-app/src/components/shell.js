@@ -32,7 +32,12 @@ class Shell extends PolymerElement {
         observer: "_pageChanged"
       },
       previousPage: {
-        type: String
+        type: Array,
+        value: []
+      },
+      _ignoreOldPage: {
+        type: Boolean,
+        value: false
       },
       refreshData: {
         type: Boolean,
@@ -132,9 +137,9 @@ text-align: center;
   }
 
   _pageChanged(page, oldPage) {
-    console.log(this.subroute);
-    if(oldPage !== undefined){
-      this.previousPage = oldPage;
+    if(oldPage !== undefined && !this._ignoreOldPage){
+      this.previousPage.push(oldPage);
+      this._ignoreOldPage = false;
   }
     switch (page) {
       case "launch":
@@ -167,10 +172,16 @@ text-align: center;
     }
  }
  _goBack(){
-         if(this.previousPage !== undefined){
-             this.page = this.previousPage;
+         if(this.previousPage.length > 0){
+            this._ignoreOldPage = true;
+             this.page = this.previousPage.pop();
+             
          }else{
            this.page = "launch";
+          
+         }
+         if(this.page === 'launch'){
+           this.previousPage = [];
          }
     }
 
