@@ -104,9 +104,8 @@ text-align: center;
             <list-topics id="list" name="list" refresh="[[refreshData]]" on-loaded="_onLoadCompleted"></list-topics>
             <add-topic name="add"></add-topic>
             <app-404 name="404"></app-404>
-            <view-topic name="view"></view-topic>
+            <view-topic name="view" id="{{route.__queryParams.id}}"></view-topic>
         </iron-pages>
-        
         </app-header-layout>
 
     `;
@@ -133,7 +132,7 @@ text-align: center;
   }
 
   _pageChanged(page, oldPage) {
-    
+    console.log(this.subroute);
     if(oldPage !== undefined){
       this.previousPage = oldPage;
   }

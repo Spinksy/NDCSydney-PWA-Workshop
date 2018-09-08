@@ -107,7 +107,7 @@ class ListTopics extends PolymerElement {
                 <paper-card>
                     <div class="card-content">
                         <div class="topic-header">
-                            [[item.title]]
+                           <a href$="/view?id=[[item.id]]">[[item.title]]</a>
                         </div>
                     <div class="topic-text">
                          [[item.text]]
@@ -172,7 +172,11 @@ class ListTopics extends PolymerElement {
 
   _formatDate(value){
     return moment(value, moment.ISO_8601).format("DD/MM/YYYY");
-}
+  }
+
+  _setDetailViewUrl(topicId){
+    return `/view/${topicId}`;
+  }
 }
 
 customElements.define("list-topics", ListTopics);
