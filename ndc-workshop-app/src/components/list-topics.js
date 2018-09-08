@@ -4,8 +4,8 @@ import "@polymer/paper-styles/typography.js";
 import "@polymer/paper-styles/color.js";
 import "@polymer/polymer/lib/elements/dom-repeat.js";
 import "@polymer/paper-spinner/paper-spinner.js";
-import {TopicService} from '../services/topics-service';
-import moment from 'moment/moment';
+import { TopicService } from "../services/topics-service";
+import moment from "moment/moment";
 /*
  * `list-topics` Description
  *
@@ -75,13 +75,26 @@ class ListTopics extends PolymerElement {
           margin-top: 10px;
       }
       .date{
-          font-size: 0.7em;
           text-align: right;
           margin-right: 5px;
-          margin-top: 10px;
       }
       .card-content{
           padding: 8px;
+      }
+
+      .footer {
+        display: flex;
+        flex-direction: row;
+        margin-top: 4px;
+        font-size: 0.7em;
+        margin-top: 10px;
+    
+      }
+
+      .detail-link{
+        flex:4;
+        margin-left: 5px;
+        
       }
       paper-card {
           max-width: 500px;
@@ -104,18 +117,23 @@ class ListTopics extends PolymerElement {
                     </paper-card>  
         </template>
             <template is="dom-repeat" items=[[topics]] initial-count="10">
-                <paper-card>
+            <paper-card>
                     <div class="card-content">
                         <div class="topic-header">
-                           <a href$="/view?id=[[item.id]]">[[item.title]]</a>
+                           [[item.title]]
                         </div>
                     <div class="topic-text">
                          [[item.text]]
                          </div>
+                         <div class="footer">
+                           <div class="detail-link">
+                             <a href$="/view?id=[[item.id]]">View</a>
+                            </div>
                      <div class="date">
                         [[_formatDate(item.date)]]
                     </div>
-                    </div>
+                </div>
+                  </div>
                 </paper-card>
             </template>
             <template is="dom-if" if="[[!_loadCompleted]]">
@@ -144,12 +162,13 @@ class ListTopics extends PolymerElement {
   __getList() {
     this._loadCompleted = false;
     this._noTopics = false;
-  const service = new TopicService();
-    return service.getTopics()
-            .then (data =>{
-                this._loadCompleted = true;
-            this.topics = data;
-            }) 
+    const service = new TopicService();
+    return service
+      .getTopics()
+      .then(data => {
+        this._loadCompleted = true;
+        this.topics = data;
+      })
       .catch(err => {
         console.error(err);
         this._loadCompleted = true;
@@ -170,11 +189,11 @@ class ListTopics extends PolymerElement {
     }
   }
 
-  _formatDate(value){
+  _formatDate(value) {
     return moment(value, moment.ISO_8601).format("DD/MM/YYYY");
   }
 
-  _setDetailViewUrl(topicId){
+  _setDetailViewUrl(topicId) {
     return `/view/${topicId}`;
   }
 }
