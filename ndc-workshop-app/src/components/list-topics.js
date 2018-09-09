@@ -162,6 +162,7 @@ class ListTopics extends PolymerElement {
   __getList() {
     this._loadCompleted = false;
     this._noTopics = false;
+    this.topics = [];
     const service = new TopicService();
     return service
       .getTopics()
