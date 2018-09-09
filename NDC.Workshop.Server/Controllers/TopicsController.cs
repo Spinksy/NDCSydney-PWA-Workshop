@@ -78,7 +78,7 @@ namespace NDC.Workshop.Server.Controllers
             try
             {
                 var savedDoc = await _client.CreateDocumentAsync(uri, topicToAdd);
-                Topic savedTopic = (dynamic)savedDoc;
+                //Topic savedTopic = (dynamic)savedDoc;
 
                 var notificationMessage = $"Topic added: {topicToAdd.Title}";
                 await _notifcationService.SendNotificationToSubscribers(notificationMessage, Request.GetBaseUrl());
