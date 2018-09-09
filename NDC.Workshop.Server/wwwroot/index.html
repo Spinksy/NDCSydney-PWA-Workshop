@@ -31,21 +31,20 @@
 <script>
 window.AppGlobals = {rootPath: '/'};
 </script>
-    <!-- <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> -->
     <script src='./wc/webcomponents-loader.js'></script>
     <script type="module" src="app.bundle.js" crossorigin></script>
     <script>
-        // if ('serviceWorker' in navigator){
-        //    navigator.serviceWorker.register('/sw.js',{scope: '/'})
-        //      .then(registration =>{
-        //         console.log('ServiceWorker is registered with scope: ',    
-        //            registration.scope);
-        //     },
-        //       err =>{
-        //         console.log('serviceWorker failed to register: ',err);
-        //        }
-        //     )
-        // }
+        if ('serviceWorker' in navigator){
+           navigator.serviceWorker.register('/sw.js',{scope: '/'})
+             .then(registration =>{
+                console.log('ServiceWorker is registered with scope: ',    
+                   registration.scope);
+            },
+              err =>{
+                console.log('serviceWorker failed to register: ',err);
+               }
+            )
+        }
       </script>
      
   </head>

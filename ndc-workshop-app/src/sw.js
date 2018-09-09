@@ -1,4 +1,7 @@
-var cache_name = "workshop_v1.7";
+const version = 2;
+const cache_name = `workshop_${version}`;
+var workshopCaches = [];
+var api_cache = "api_cache";
 var urlsToCache = [
   ".",
   "index.html",
@@ -7,39 +10,68 @@ var urlsToCache = [
   "add-topic.bundle.js",
   "list-topics.bundle.js",
   "app-404.bundle.js",
+  "view-topic.bundle.js",
+  "vendors~add-topic.bundle.js",
+  "vendors~add-topic~launch-page~list-topics.bundle.js",
+  "vendors~add-topic~list-topics.bundle.js",
+  "vendors~list-topics.bundle.js",
+  "vendors~list-topics~view-topic.bundle.js",
+  "vendors~view-topic.bundle.js",
   "https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic"
 ];
 
 importScripts("js/idb.js", "js/store.js");
 
 self.addEventListener("install", event => {
-  self.skipWaiting();
+ 
   console.log("called service worker install");
   event.waitUntil(
-    (function() {
-      caches.open(cache_name).then(function(cache) {
+      caches.open(cache_name)
+      .then(function(cache) {
         return cache.addAll(urlsToCache);
-      });
-    })()
+      })
+      .then( () => {
+          return self.skipWaiting();
+      })
   );
 });
 
 //activate
 self.addEventListener("activate", event => {
   console.log("service worker: activate");
-  event.waitUntil(self.clients.claim());
+
+  event.waitUntil(
+      caches.keys()
+      .then (keys => Promise.all(
+        keys.map( key => {
+            if (cache_name !== key){
+                return caches.delete(key)
+            }
+        })
+        ))
+        .then (() =>{
+            return self.clients.claim();
+        })
+    )
 });
 
 //fetch
 self.addEventListener("fetch", function(event) {
     const requestURL = new URL(event.request.url);
     console.log('Url:', requestURL);
+   
     //we only want to handle GET request
     if (event.request.method !== "GET" || requestURL.protocol ==='chrome-extension') {
     return;
   }
-  if (event.request.method === "GET" || event.request.mode === "navigate")
+ 
+  if (event.request.method === "GET" ){
+  if(/^\/api\//.test(requestURL.pathname)){
+    console.log("captured api call");
+    return;
+}
     event.respondWith(cacheThenNetwork(event.request));
+}
 });
 
 //push

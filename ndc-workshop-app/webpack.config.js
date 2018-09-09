@@ -2,6 +2,16 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const ManifestPlugin = require('webpack-manifest-plugin');
+
+const pathsToClean = [
+    '../Ndc.Workshop.Server/wwwroot/*.*'
+];
+
+const cleanOptions = {
+    allowExternal: true
+};
 
 module.exports = {
     entry: {
@@ -16,7 +26,7 @@ module.exports = {
     devtool: "eval-source-map",
     mode: 'development',
     plugins: [
-        new CleanWebpackPlugin(),
+        new CleanWebpackPlugin(pathsToClean, cleanOptions),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './index.html'),
             filename: "index.html",
@@ -53,6 +63,9 @@ module.exports = {
     
                 
             ]
-        )
+        ),
+        new ManifestPlugin({fileName: 'filemanifest.json'})
+        // new BundleAnalyzerPlugin()
+
     ]
 }
