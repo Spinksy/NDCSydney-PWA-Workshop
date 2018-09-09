@@ -23,15 +23,15 @@ var urlsToCache = [
 importScripts("js/idb.js", "js/store.js");
 
 self.addEventListener("install", event => {
- 
   console.log("called service worker install");
   event.waitUntil(
-      caches.open(cache_name)
+    caches
+      .open(cache_name)
       .then(function(cache) {
         return cache.addAll(urlsToCache);
       })
-      .then( () => {
-          return self.skipWaiting();
+      .then(() => {
+        return self.skipWaiting();
       })
   );
 });
@@ -41,37 +41,44 @@ self.addEventListener("activate", event => {
   console.log("service worker: activate");
 
   event.waitUntil(
-      caches.keys()
-      .then (keys => Promise.all(
-        keys.map( key => {
-            if (cache_name !== key){
-                return caches.delete(key)
+    caches
+      .keys()
+      .then(keys =>
+        Promise.all(
+          keys.map(key => {
+            if (cache_name !== key) {
+              return caches.delete(key);
             }
-        })
-        ))
-        .then (() =>{
-            return self.clients.claim();
-        })
-    )
+          })
+        )
+      )
+      .then(() => {
+        return self.clients.claim();
+      })
+  );
 });
 
 //fetch
 self.addEventListener("fetch", function(event) {
-    const requestURL = new URL(event.request.url);
-    console.log('Url:', requestURL);
-   
-    //we only want to handle GET request
-    if (event.request.method !== "GET" || requestURL.protocol ==='chrome-extension') {
+  const requestURL = new URL(event.request.url);
+  console.log("Url:", requestURL);
+
+  //we only want to handle GET request
+  if (
+    event.request.method !== "GET" ||
+    requestURL.protocol === "chrome-extension"
+  ) {
     return;
   }
- 
-  if (event.request.method === "GET" ){
-  if(/^\/api\//.test(requestURL.pathname)){
-    console.log("captured api call");
-    return;
-}
-    event.respondWith(cacheThenNetwork(event.request));
-}
+
+  if (event.request.method === "GET") {
+    if (/^\/api\//.test(requestURL.pathname)) {
+      console.log("captured api call");
+      event.respondWith(networkThenCache(event.request, api_cache));
+    } else {
+      event.respondWith(cacheThenNetwork(event.request));
+    }
+  }
 });
 
 //push
@@ -91,8 +98,7 @@ self.addEventListener("push", event => {
 
 //cache first
 function cacheThenNetwork(request) {
-    
-    return caches
+  return caches
     .match(request)
     .then(response => {
       if (response) {
@@ -154,6 +160,28 @@ self.addEventListener("sync", event => {
       .catch(err => console.error(err))
   );
 });
+
+function networkThenCache(request, cacheName) {
+  return fromNetwork(request, 300)
+    .then(response => {
+      return caches
+        .open(cacheName)
+        .then(cache => {
+          cache.put(request.url, response.clone());
+          return response;
+        })
+        .catch(error => {
+          console.log(`Cache error: ${request.url}`);
+        });
+    })
+    .catch(reason => {
+      return caches.open(cacheName).then(cache => {
+        return cache.match(request).then(match => {
+          return match;
+        });
+      });
+    });
+}
 
 function fromNetwork(request, timeout) {
   return new Promise(function(resolve, reject) {
