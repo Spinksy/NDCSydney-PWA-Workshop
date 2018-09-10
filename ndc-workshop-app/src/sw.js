@@ -32,7 +32,7 @@ self.addEventListener("activate", event => {
       });
       await self.clients.claim();
       
-     sendAMessage("Service worker is activated");
+      //add call to sendMessage function
       
   }());
 });
@@ -47,6 +47,7 @@ self.addEventListener("fetch", function(event) {
     event.request.method !== "GET" ||
     requestURL.protocol === "chrome-extension"
   ) {
+    console.log(requestUrl);
     return;
   }
 
@@ -150,21 +151,7 @@ self.addEventListener("push", event => {
   }
 });
 
-
-
-
-
- function sendAMessage(message){
-
-
-    self.clients.matchAll().then(clients =>{
-        clients.forEach(client => {
-            client.postMessage({
-                msg: message
-              });
-        });
-      });
-}
+//Add sendMessage function
 
 
 
