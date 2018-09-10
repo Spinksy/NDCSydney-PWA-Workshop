@@ -1,21 +1,6 @@
-const version = 1;
-const cache_name = `workshop_${version}`;
-var workshopCaches = [];
-var api_cache = "api_cache";
-var urlsToCache = [
-  ".",
-  "index.html",
-  "app.bundle.js",
-  "launch-page.bundle.js",
-  "add-topic.bundle.js",
-  "list-topics.bundle.js",
-  "app-404.bundle.js",
-  "view-topic.bundle.js",
-  "vendors~list-topics~view-topic.bundle.js",
-  "https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic"
-];
+//  ?. Add consts and pre-load array of files
 
-importScripts("js/idb.js", "js/store.js");
+// ? sync add import scripts for accessing IndexedDB
 
 self.addEventListener("install", event => {
   console.log("called service worker install");
@@ -145,6 +130,11 @@ function cacheThenNetwork(request) {
     });
   }
 
+  //sync event
+self.addEventListener("sync", event => {
+  console.log("service worker: sync");
+});
+
 //push
 self.addEventListener("push", event => {
   console.log("Push event");
@@ -162,39 +152,7 @@ self.addEventListener("push", event => {
 
 
 
-//sync event
-self.addEventListener("sync", event => {
-  console.log("service worker: sync");
-  event.waitUntil(
-    store
-      .outbox("readwrite")
-      .then(outbox => {
-        return outbox.getAll();
-      })
-      .then(messages => {
-        return Promise.all(
-          messages.map(message => {
-            return fetch("api/topics", {
-              method: "POST",
-              body: JSON.stringify(message),
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-              }
-            }).then(response => {
-              if (response.ok) {
 
-                return store.outbox("readwrite").then(outbox => {
-                  return outbox.delete(message.id);
-                });
-              }
-            });
-          })
-        );
-      })
-      .catch(err => console.error(err))
-  );
-});
 
  function sendAMessage(message){
 
