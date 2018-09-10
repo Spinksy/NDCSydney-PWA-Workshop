@@ -83,7 +83,7 @@ class ViewTopic extends PolymerElement {
         this.topic = data;
         }) 
         .catch(err => {
-            console.error(err);
+           this.data = {title: "Topic currently unavailable", text: "you may be offline"}
         });
 
     }

@@ -175,29 +175,37 @@ function networkThenCache(request, cacheName) {
         });
     })
     .catch(reason => {
-      return caches.open(cacheName).then(cache => {
-        return cache.match(request).then(match => {
-          return match;
+        return caches.open(cacheName).then(cache => {
+            return cache.match(request).then(match => {
+              return match;
+            });
+          });
         });
-      });
-    });
+
+
 }
 
 function fromNetwork(request, timeout) {
   return new Promise(function(resolve, reject) {
-    var timeoutId = setTimeout(reject, timeout);
+    const timeoutId = setTimeout(reject, timeout);
 
     fetch(request).then(function(response) {
       clearTimeout(timeoutId);
+      console.log("From network: ", request.clone().url);
       resolve(response);
     }, reject);
   });
 }
 
-function fromCache(request) {
-  return caches.open(cache_name).then(function(cache) {
-    return cache.match(request).then(function(match) {
-      return match || Promise.reject("no-match");
-    });
-  });
+function fromCache(request, cacheName) {
+  return caches.open(cacheName)
+    .then(cache => {
+        return cache.match(request)
+            .then(function(match) {
+                if (match){
+                    console.log("From cache: ",request.clone().url);
+                }
+                return match;
+             });
+     });
 }
