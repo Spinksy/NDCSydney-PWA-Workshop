@@ -76,14 +76,84 @@ self.addEventListener("fetch", function(event) {
   }
 
   if (event.request.method === "GET") {
+      //if an api call want to call network first and then cache.
     if (/^\/api\//.test(requestURL.pathname)) {
       console.log("captured api call");
-      event.respondWith(networkThenCache(event.request, api_cache));
+     event.respondWith(networkThenCache(event.request, api_cache));
     } else {
       event.respondWith(cacheThenNetwork(event.request));
     }
   }
 });
+
+//cache first
+function cacheThenNetwork(request) {
+    return caches
+      .match(request)
+      .then(response => {
+        if (response) {
+          console.log(`Found ${request.url} in cache`);
+          return response;
+        }
+  
+        console.log(`Nework request for ${request.url}`);
+        return fetch(request).then(response => {
+          if (response.status === 404) {
+            //return 404 page.
+          }
+          return caches
+            .open(cache_name)
+            .then(cache => {
+              cache.put(request.url, response.clone());
+              return response;
+            })
+            .catch(error => {
+              console.log(`Cache error: ${request.url}`);
+            });
+        });
+      })
+      .catch(error => {
+        console.log("Error", error);
+        //return offline page
+      });
+  }
+
+  //Network and then cache
+  function networkThenCache(request, cacheName) {
+    return fromNetwork(request,1000)
+      .then(response => {
+        return caches
+          .open(cacheName)
+          .then(cache => {
+            cache.put(request.url, response.clone());
+            return response;
+          })
+          .catch(error => {
+            console.log(`Cache error: ${request.url}`);
+          });
+      })
+      .catch(reason => {
+          return caches.open(cacheName).then(cache => {
+              return cache.match(request).then(match => {
+                return match;
+              });
+            });
+          });
+  
+  
+  }
+  
+  function fromNetwork(request, timeout) {
+    return new Promise(function(resolve, reject) {
+      const timeoutId = setTimeout(reject, timeout);
+  
+      fetch(request).then(function(response) {
+        clearTimeout(timeoutId);
+        console.log("From network: ", request.clone().url);
+        resolve(response);
+      }, reject);
+    });
+  }
 
 //push
 self.addEventListener("push", event => {
@@ -100,37 +170,7 @@ self.addEventListener("push", event => {
   }
 });
 
-//cache first
-function cacheThenNetwork(request) {
-  return caches
-    .match(request)
-    .then(response => {
-      if (response) {
-        console.log(`Found ${request.url} in cache`);
-        return response;
-      }
 
-      console.log(`Nework request for ${request.url}`);
-      return fetch(request).then(response => {
-        if (response.status === 404) {
-          //return 404 page.
-        }
-        return caches
-          .open(cache_name)
-          .then(cache => {
-            cache.put(request.url, response.clone());
-            return response;
-          })
-          .catch(error => {
-            console.log(`Cache error: ${request.url}`);
-          });
-      });
-    })
-    .catch(error => {
-      console.log("Error", error);
-      //return offline page
-    });
-}
 
 //sync event
 self.addEventListener("sync", event => {
@@ -165,41 +205,7 @@ self.addEventListener("sync", event => {
   );
 });
 
-function networkThenCache(request, cacheName) {
-  return fromNetwork(request, 500)
-    .then(response => {
-      return caches
-        .open(cacheName)
-        .then(cache => {
-          cache.put(request.url, response.clone());
-          return response;
-        })
-        .catch(error => {
-          console.log(`Cache error: ${request.url}`);
-        });
-    })
-    .catch(reason => {
-        return caches.open(cacheName).then(cache => {
-            return cache.match(request).then(match => {
-              return match;
-            });
-          });
-        });
 
-
-}
-
-function fromNetwork(request, timeout) {
-  return new Promise(function(resolve, reject) {
-    const timeoutId = setTimeout(reject, timeout);
-
-    fetch(request).then(function(response) {
-      clearTimeout(timeoutId);
-      console.log("From network: ", request.clone().url);
-      resolve(response);
-    }, reject);
-  });
-}
 
 // function fromCache(request, cacheName) {
 //   return caches.open(cacheName)
