@@ -144,14 +144,14 @@ class AddTopic extends PolymerElement {
           this.title = '';
           this.text = '';
         } else {
-          // add logic to save topic to IndexedDB
+          // add logic to save topic to IndexedDB and remove the following
           this._setToast('failed');
           this._userMessage = 'failed to save topic';
         }
         this.$.saveToast.open();
       })
       .catch(error => {
-        //also add logic to save topic to IndexedDB
+        //also add logic to save topic to IndexedDB and remove the following
         this._setToast('failed');
         this._userMessage = 'failed to save topic';
         this.$.saveToast.open();
