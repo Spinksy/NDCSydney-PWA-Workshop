@@ -123,6 +123,11 @@ text-align: center;
    */
   constructor() {
     super();
+    if (window.navigator.serviceWorker){
+      window.navigator.serviceWorker.addEventListener('message', event =>{
+        console.log(event.data.msg);
+      })
+    }
   }
 
   _routePageChanged(page) {
@@ -139,8 +144,8 @@ text-align: center;
   _pageChanged(page, oldPage) {
     if(oldPage !== undefined && !this._ignoreOldPage){
       this.previousPage.push(oldPage);
-      this._ignoreOldPage = false;
   }
+  this._ignoreOldPage = false;
     switch (page) {
       case "launch":
         import(/* webpackChunkName: "launch-page" */ "./launch-page");

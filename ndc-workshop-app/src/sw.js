@@ -40,22 +40,26 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   console.log("service worker: activate");
 
-  event.waitUntil(
-    caches
-      .keys()
-      .then(keys =>
-        Promise.all(
-          keys.map(key => {
-            if (cache_name !== key) {
-              return caches.delete(key);
-            }
-          })
-        )
-      )
-      .then(() => {
-        return self.clients.claim();
-      })
-  );
+  event.waitUntil( async function(){
+      await caches.keys().then(cacheNames =>{
+        cacheNames.filter(cacheName => {
+            return cacheName !== cache_name;
+                })
+                .map(async cacheName =>{
+                    console.log(`deleting ${cacheName}`);
+                    await caches.delete(cacheName);
+                });
+      });
+      await self.clients.claim();
+    //   //this is a test
+    //   self.clients.matchAll().then(clients =>{
+    //     clients.forEach(client => {
+    //         client.postMessage({
+    //             msg: "serviceWorker activated"
+    //           });
+    //     });
+    //   });
+  }());
 });
 
 //fetch
@@ -162,7 +166,7 @@ self.addEventListener("sync", event => {
 });
 
 function networkThenCache(request, cacheName) {
-  return fromNetwork(request, 300)
+  return fromNetwork(request, 500)
     .then(response => {
       return caches
         .open(cacheName)
@@ -197,15 +201,15 @@ function fromNetwork(request, timeout) {
   });
 }
 
-function fromCache(request, cacheName) {
-  return caches.open(cacheName)
-    .then(cache => {
-        return cache.match(request)
-            .then(function(match) {
-                if (match){
-                    console.log("From cache: ",request.clone().url);
-                }
-                return match;
-             });
-     });
-}
+// function fromCache(request, cacheName) {
+//   return caches.open(cacheName)
+//     .then(cache => {
+//         return cache.match(request)
+//             .then(function(match) {
+//                 if (match){
+//                     console.log("From cache: ",request.clone().url);
+//                 }
+//                 return match;
+//              });
+//      });
+// }
