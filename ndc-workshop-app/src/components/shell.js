@@ -11,6 +11,7 @@ import "@polymer/app-route/app-location.js";
 import "@polymer/iron-pages/iron-pages.js";
 import "@polymer/iron-icons/iron-icons.js";
 import "@polymer/paper-icon-button/paper-icon-button.js";
+import "@polymer/paper-toast";
 
 setPassiveTouchGestures(true);
 setRootPath(AppGlobals.rootPath);
@@ -45,7 +46,8 @@ class Shell extends PolymerElement {
       },
       routeData: Object,
       subroute: Object,
-      route: Object
+      route: Object,
+      _toastMessage: String
      
     };
   }
@@ -85,6 +87,10 @@ text-align: center;
     margin-right: 0.5rem;
   }
 
+   .info-toast{
+            --paper-toast-background-color: var(--paper-blue-700) ;
+        }
+
 </style>
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
       <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
@@ -111,6 +117,7 @@ text-align: center;
             <app-404 name="404"></app-404>
             <view-topic name="view" id="{{route.__queryParams.id}}"></view-topic>
         </iron-pages>
+        <paper-toast class="info-toast fit-bottom" raised id="infoToast" >[[_toastMessage]]</paper-toast>
         </app-header-layout>
 
     `;
@@ -125,7 +132,8 @@ text-align: center;
     super();
     if (window.navigator.serviceWorker){
       window.navigator.serviceWorker.addEventListener('message', event =>{
-        console.log(event.data.msg);
+        this._toastMessage = event.data.msg;
+        this.$.infoToast.open();
       })
     }
   }

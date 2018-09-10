@@ -51,14 +51,9 @@ self.addEventListener("activate", event => {
                 });
       });
       await self.clients.claim();
-    //   //this is a test
-    //   self.clients.matchAll().then(clients =>{
-    //     clients.forEach(client => {
-    //         client.postMessage({
-    //             msg: "serviceWorker activated"
-    //           });
-    //     });
-    //   });
+      
+     sendAMessage("Service worker is activated");
+      
   }());
 });
 
@@ -193,6 +188,7 @@ self.addEventListener("sync", event => {
               }
             }).then(response => {
               if (response.ok) {
+
                 return store.outbox("readwrite").then(outbox => {
                   return outbox.delete(message.id);
                 });
@@ -205,17 +201,17 @@ self.addEventListener("sync", event => {
   );
 });
 
+ function sendAMessage(message){
 
 
-// function fromCache(request, cacheName) {
-//   return caches.open(cacheName)
-//     .then(cache => {
-//         return cache.match(request)
-//             .then(function(match) {
-//                 if (match){
-//                     console.log("From cache: ",request.clone().url);
-//                 }
-//                 return match;
-//              });
-//      });
-// }
+    self.clients.matchAll().then(clients =>{
+        clients.forEach(client => {
+            client.postMessage({
+                msg: message
+              });
+        });
+      });
+}
+
+
+
