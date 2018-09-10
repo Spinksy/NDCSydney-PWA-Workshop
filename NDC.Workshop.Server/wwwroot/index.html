@@ -6,16 +6,7 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
     
-    <meta name="description" content="Simple application for NDC PWA Workshop">
-    <meta name="apple-mobile-web-app-title" content="A Stupid App">
-    <meta name="application-name" content="A Stupid App">
-    <meta name="theme-color" content="#382f8a">
-
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-    <link rel="icon" type="image/png" ="16x16" href="assets/favicon-16x16.png">
-
-    <link rel="manifest" href="/manifest.json">
+   <!-- 2. Add metadata and manifest.json link -->
 
     
     <style>
@@ -27,23 +18,14 @@
         background-color: #eeeeee;
         box-sizing: border-box;
       }
+      
     </style>
 <script>
 window.AppGlobals = {rootPath: '/'};
 </script>
     
     <script>
-        if ('serviceWorker' in navigator){
-           navigator.serviceWorker.register('/sw.js',{scope: '/'})
-             .then(registration =>{
-                console.log('ServiceWorker is registered with scope: ',    
-                   registration.scope);
-            },
-              err =>{
-                console.log('serviceWorker failed to register: ',err);
-               }
-            )
-        }
+      // 3. add logic for registering service worker
       </script>
      
   </head>
@@ -51,7 +33,7 @@ window.AppGlobals = {rootPath: '/'};
       <noscript>
           Javascript needs to be enabled to use this application 
        </noscript>
-    <app-shell unresolved><h2>waiting to load</h2> </app-shell>
+    <app-shell unresolved><h2>waiting to load...</h2> </app-shell>
 
     <script src='./wc/webcomponents-loader.js'></script>
    
