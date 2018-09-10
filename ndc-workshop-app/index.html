@@ -27,11 +27,11 @@
         background-color: #eeeeee;
         box-sizing: border-box;
       }
+      
     </style>
 <script>
 window.AppGlobals = {rootPath: '/'};
 </script>
-    <script src='./wc/webcomponents-loader.js'></script>
     
     <script>
         if ('serviceWorker' in navigator){
@@ -49,11 +49,13 @@ window.AppGlobals = {rootPath: '/'};
      
   </head>
   <body>
-    <app-shell unresolved></app-shell>
+      <noscript>
+          Javascript needs to be enabled to use this application 
+       </noscript>
+    <app-shell unresolved><h2>waiting to load...</h2> </app-shell>
 
-    <noscript>
-       Javascript needs to be enabled to use this application 
-    </noscript>
+    <script src='./wc/webcomponents-loader.js'></script>
+   
     <script type="module" src="<%= htmlWebpackPlugin.files.js[0] %>" crossorigin></script>
   </body>
 </html>

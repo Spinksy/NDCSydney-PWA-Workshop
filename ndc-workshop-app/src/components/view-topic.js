@@ -1,6 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import {TopicService} from '../services/topics-service';
-import '@polymer/paper-styles/paper-styles';
+import './index';
 import moment from 'moment/moment';
 
 /**

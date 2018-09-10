@@ -1,8 +1,7 @@
 import { PolymerElement, html } from "@polymer/polymer/polymer-element";
-import "@polymer/paper-styles/color";
-import "@polymer/paper-styles/typography";
-import "@polymer/paper-button/paper-button";
-import { PushNotificationService } from "../services/push-notification-service";
+
+import { PushNotificationService } from "../services/push-notification-service";  
+import './index';
 
 /**
  * `launch-page` Description

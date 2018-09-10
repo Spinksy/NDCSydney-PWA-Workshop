@@ -1,12 +1,5 @@
-import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
-import "@polymer/paper-card/paper-card.js";
-import "@polymer/paper-styles/typography.js";
-import "@polymer/paper-styles/color.js";
-import "@polymer/paper-input/paper-input.js";
-import "@polymer/paper-input/paper-textarea.js";
-import "@polymer/paper-card/paper-card";
-import "@polymer/paper-button/paper-button";
-import "@polymer/paper-toast";
+import { PolymerElement, html } from "@polymer/polymer/polymer-element";
+import './index';
 import { TopicService } from "../services/topics-service";
 import { Store } from "../js/storeClass";
 /**

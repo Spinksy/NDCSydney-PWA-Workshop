@@ -1,4 +1,4 @@
-const version = 2;
+const version = 1;
 const cache_name = `workshop_${version}`;
 var workshopCaches = [];
 var api_cache = "api_cache";
@@ -11,12 +11,7 @@ var urlsToCache = [
   "list-topics.bundle.js",
   "app-404.bundle.js",
   "view-topic.bundle.js",
-  "vendors~add-topic.bundle.js",
-  "vendors~add-topic~launch-page~list-topics.bundle.js",
-  "vendors~add-topic~list-topics.bundle.js",
-  "vendors~list-topics.bundle.js",
   "vendors~list-topics~view-topic.bundle.js",
-  "vendors~view-topic.bundle.js",
   "https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic"
 ];
 

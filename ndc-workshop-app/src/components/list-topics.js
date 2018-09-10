@@ -1,9 +1,5 @@
 import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
-import "@polymer/paper-card/paper-card.js";
-import "@polymer/paper-styles/typography.js";
-import "@polymer/paper-styles/color.js";
-import "@polymer/polymer/lib/elements/dom-repeat.js";
-import "@polymer/paper-spinner/paper-spinner.js";
+import './index';
 import { TopicService } from "../services/topics-service";
 import moment from "moment/moment";
 /*
