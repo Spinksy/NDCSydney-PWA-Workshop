@@ -4,6 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ManifestPlugin = require('webpack-manifest-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const pathsToClean = [
     '../Ndc.Workshop.Server/wwwroot/*.*'
@@ -37,11 +38,7 @@ module.exports = {
                 {
                     from: path.resolve(__dirname, "src/manifest.json"),
                     to:''
-                },
-                {
-                    from: path.resolve(__dirname, 'src/sw.js'),
-                    to:''
-                },
+                },               
                 {
                     from: path.resolve(__dirname, 'src/js/'),
                     to:'js'
@@ -58,14 +55,13 @@ module.exports = {
                     from: path.resolve(__dirname, 'node_modules/@webcomponents/webcomponentsjs/bundles'),
                     to:'wc/bundles'
                 }
-
-            
-    
-                
             ]
         ),
-        new ManifestPlugin({fileName: 'filemanifest.json'})
-        // new BundleAnalyzerPlugin()
-
+        new ManifestPlugin({fileName: 'filemanifest.json'}),
+        new WorkboxPlugin.GenerateSW({
+            swDest: 'sw.js',
+            clientsClaim: true,
+            skipWaiting: true
+        })
     ]
 }
