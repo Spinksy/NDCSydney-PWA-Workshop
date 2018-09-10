@@ -1,0 +1,28 @@
+//add the following to the import statements
+import { Store } from "../js/storeClass";
+
+in add-topic.js
+//add this to the constructor
+this.dbStore = new Store();
+
+//add this function to the class
+ _saveToStore(topic) {
+    return navigator.serviceWorker.getRegistration().then(reg => {
+      if ("sync" in reg) {
+        this.dbStore
+          .outbox('readwrite')
+          .then(outbox => {
+            return outbox.put(topic);
+          })
+          .then(() => {
+            return reg.sync.register('outbox');
+          });
+      }
+    });
+  }
+
+//in _submitTopic replace the failed response logic with this
+this._saveToStore(topic).then(r => {
+            this._setToast("pending");
+            this._userMessage = "Topic will be saved later.";
+          });
