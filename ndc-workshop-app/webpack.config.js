@@ -61,7 +61,11 @@ module.exports = {
         new WorkboxPlugin.GenerateSW({
             swDest: 'sw.js',
             clientsClaim: true,
-            skipWaiting: true
+            skipWaiting: true,
+            runtimeCaching: [{
+                urlPattern: new RegExp('https://localhost:5001/api'),
+                handler: 'staleWhileRevalidate'
+            }]
         })
     ]
 }
