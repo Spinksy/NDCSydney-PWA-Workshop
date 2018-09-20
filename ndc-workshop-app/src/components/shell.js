@@ -123,12 +123,6 @@ text-align: center;
    */
   constructor() {
     super();
-    if (window.navigator.serviceWorker){
-      window.navigator.serviceWorker.addEventListener('message', event =>{
-        this._toastMessage = event.data.msg;
-        this.$.infoToast.open();
-      })
-    }
   }
 
   _routePageChanged(page) {

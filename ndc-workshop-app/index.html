@@ -6,58 +6,35 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
+    
+   <!-- 2. Add metadata and manifest.json link -->
 
-  <meta name="description" content="Simple application for NDC PWA Workshop">
-  <meta name="apple-mobile-web-app-title" content="A Stupid App">
-  <meta name="application-name" content="A Stupid App">
-  <meta name="theme-color" content="#382f8a">
-
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-
-  <link rel="manifest" href="/manifest.json">
-
-
-  <style>
-    body {
-      margin: 0;
-      font-family: "Roboto", "Noto", sans-serif;
-      line-height: 1.5;
-      min-height: 100vh;
-      background-color: #eeeeee;
-      box-sizing: border-box;
-    }
-  </style>
-  <script>
-    window.AppGlobals = { rootPath: '/' };
-  </script>
+    
+    <style>
+      body {
+        margin: 0;
+        font-family: "Roboto", "Noto", sans-serif;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #eeeeee;
+        box-sizing: border-box;
+      }
+      
+    </style>
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js', { scope: '/' })
-        .then(registration => {
-          console.log('ServiceWorker is registered with scope: ',
-            registration.scope);
-        },
-          err => {
-            console.log('serviceWorker failed to register: ', err);
-          }
-        )
-    });
-  }
+window.AppGlobals = {rootPath: '/'};
 </script>
-  
-
-</head>
-
-<body>
-  <noscript>
-    Javascript is required
-</noscript>
-  <app-shell unresolved>
-    <h2 style="width:100%;text-align: center;" >waiting to load...</h2>
-  </app-shell>
+    
+    <script>
+      // 3. add logic for registering service worker
+      </script>
+     
+  </head>
+  <body>
+      <noscript>
+          Javascript needs to be enabled to use this application 
+       </noscript>
+    <app-shell unresolved><h2>waiting to load...</h2> </app-shell>
 
   <script src='./wc/webcomponents-loader.js'></script>
   <script>

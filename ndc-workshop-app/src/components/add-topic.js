@@ -1,7 +1,8 @@
 import { PolymerElement, html } from "@polymer/polymer/polymer-element";
 import './index';
 import { TopicService } from "../services/topics-service";
-import { Store } from "../js/storeClass";
+// add import state for store
+
 /**
  * `add-topic` Description
  *
@@ -84,6 +85,9 @@ class AddTopic extends PolymerElement {
         .save-toast-pending {
             --paper-toast-background-color: var(--paper-amber-700)
         }
+        .save-toast-failed {
+          --paper-toast-background-color: var(--paper-red-700)
+        }
 
         @media only screen and (max-width: 600px){
           paper-card {
@@ -114,7 +118,8 @@ class AddTopic extends PolymerElement {
   constructor() {
     super();
     this.topicService = new TopicService();
-    this.dbStore = new Store();
+    //add creation of Store.
+    
   }
 
   /**
@@ -135,54 +140,39 @@ class AddTopic extends PolymerElement {
       .then(response => {
         if (response.status === 200 || response.status === 201) {
           this._userMessage = `topic "${this.title}" saved`;
-          this._setToast("success");
+          this._setToast('success');
+          this.title = '';
+          this.text = '';
         } else {
-          this._saveToStore(topic).then(r => {
-            this._setToast("pending");
-            this._userMessage = "Topic will be saved later.";
-          });
+          // add logic to save topic to IndexedDB and remove the following
+          this._setToast('failed');
+          this._userMessage = 'failed to save topic';
         }
         this.$.saveToast.open();
-        this.title = "";
-        this.text = "";
       })
       .catch(error => {
-        this._saveToStore(topic).then(r => {
-          this._setToast("pending");
-          this._userMessage = "Topic will be saved later.";
-          this.$.saveToast.open();
-          this.title = "";
-          this.text = "";
-        });
+        //also add logic to save topic to IndexedDB and remove the following
+        this._setToast('failed');
+        this._userMessage = 'failed to save topic';
+        this.$.saveToast.open();
       });
   }
 
   _setToast(status) {
-    this.$.saveToast.classList.add("fit-bottom");
+    this.$.saveToast.classList.add('fit-bottom');
     switch (status) {
-      case "success":
-        this.$.saveToast.classList.add("save-toast");
+      case 'success':
+        this.$.saveToast.classList.add('save-toast');
         break;
-      case "pending":
-        this.$.saveToast.classList.add("save-toast-pending");
+      case 'pending':
+        this.$.saveToast.classList.add('save-toast-pending');
         break;
+      case 'failed':
+       this.$.saveToast.classList.add('save-toast-failed');
     }
   }
 
-  _saveToStore(topic) {
-    return navigator.serviceWorker.getRegistration().then(reg => {
-      if ("sync" in reg) {
-        this.dbStore
-          .outbox("readwrite")
-          .then(outbox => {
-            return outbox.put(topic);
-          })
-          .then(() => {
-            return reg.sync.register("outbox");
-          });
-      }
-    });
-  }
+ 
 }
 
-customElements.define("add-topic", AddTopic);
+customElements.define('add-topic', AddTopic);

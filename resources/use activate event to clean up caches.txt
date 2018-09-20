@@ -1,0 +1,15 @@
+ event.waitUntil( async function(){
+      await caches.keys().then(cacheNames =>{
+        cacheNames.filter(cacheName => {
+            return cacheName !== cache_name;
+                })
+                .map(async cacheName =>{
+                    console.log(`deleting ${cacheName}`);
+                    await caches.delete(cacheName);
+                });
+      });
+      await self.clients.claim();
+      
+      //add call to sendMessage function
+      
+  }());
