@@ -66,7 +66,7 @@
             document.removeEventListener('WebComponentsReady', componentsReady, false);
             var script = document.createElement('script');
             script.type = 'module';
-            script.src = 'vendors~app.bundle.js';
+            script.src = 'app.bundle.js';
             var refScript = document.getElementsByTagName('script')[0];
             refScript.parentNode.insertBefore(script, refScript);
         }, false);
