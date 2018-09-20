@@ -1,3 +1,4 @@
+```js
 //push
 self.addEventListener("push", event => {
   console.log("Push event");
@@ -12,3 +13,4 @@ self.addEventListener("push", event => {
     event.waitUntil(self.registration.showNotification(title, options));
   }
 });
+```

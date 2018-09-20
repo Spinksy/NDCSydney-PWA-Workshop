@@ -1,3 +1,4 @@
+```js
 
 
 //add this function to the sw.js
@@ -24,3 +25,4 @@ if (window.navigator.serviceWorker){
         this.$.infoToast.open();
       })
     }
+```
