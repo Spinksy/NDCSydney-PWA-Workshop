@@ -9,7 +9,5 @@
                 });
       });
       await self.clients.claim();
-      
-      //add call to sendMessage function
-      
+   
   }());

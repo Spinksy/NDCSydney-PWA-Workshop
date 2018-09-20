@@ -33,7 +33,7 @@ function cacheThenNetwork(request) {
         console.log(`Nework request for ${request.url}`);
         return fetch(request).then(response => {
           if (response.status === 404) {
-            //return 404 page.
+            return response;
           }
           return caches
             .open(cache_name)
