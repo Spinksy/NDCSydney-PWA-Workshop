@@ -58,14 +58,18 @@ module.exports = {
             ]
         ),
         new ManifestPlugin({fileName: 'filemanifest.json'}),
-        new WorkboxPlugin.GenerateSW({
-            swDest: 'sw.js',
-            clientsClaim: true,
-            skipWaiting: true,
-            runtimeCaching: [{
-                urlPattern: new RegExp('https://localhost:5001/api'),
-                handler: 'staleWhileRevalidate'
-            }]
-        })
+        // new WorkboxPlugin.GenerateSW({
+        //     swDest: 'sw.js',
+        //     clientsClaim: true,
+        //     skipWaiting: true,
+        //     runtimeCaching: [{
+        //         urlPattern: new RegExp('https://localhost:5001/api'),
+        //         handler: 'staleWhileRevalidate'
+        //     }]
+        // })
+        new WorkboxPlugin.InjectManifest({
+            swSrc: './src/sw.js',
+            swDest: 'sw.js'
+          })
     ]
 }
