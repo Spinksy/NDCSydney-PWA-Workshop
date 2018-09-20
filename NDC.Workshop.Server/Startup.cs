@@ -32,6 +32,11 @@ namespace NDC.Workshop.Server
         public void ConfigureServices(IServiceCollection services)
         {
             var tempConfig = Configuration.GetSection("CosmosDb");
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+               
+            });
             services.AddOptions();
             services.Configure<CosmosDbConfiguration>(Configuration.GetSection("CosmosDb"));
             services.Configure<VapidSettings>(Configuration.GetSection("VapidSettings"));

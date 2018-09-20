@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "startdotnet": "npm run build && dotnet run -p ../Ndc.Workshop.Server"
+    "start": "npm run build && dotnet run -p ../Ndc.Workshop.Server"
   },
   "keywords": [],
   "author": "",

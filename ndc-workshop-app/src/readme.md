@@ -7,7 +7,7 @@ Visual Studio 2017 (optional)
 Before starting run `npm install`
 
 ## to run the application
-To run the application type in the terminal window `npm run startdotnet`.
+To run the application type in the terminal window `npm start`.
 This will bundle the application with webpack and start the .NET web application.
 
 Once the application, after making changes to the client application can just run `npm run build` to rebundle the application and then refresh the browers. There is no need to stop and restart .NET.

@@ -1,7 +1,7 @@
 export class TopicService {
 
     constructor(){
-        this.baseUrl = window.location.origin;
+        this.baseUrl =  'https://timeghostpwa.azurewebsites.net';// window.location.origin;
         this.apiEndpoint = `${this.baseUrl}/api/topics`
     }
      

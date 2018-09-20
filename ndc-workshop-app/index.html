@@ -31,9 +31,7 @@ window.AppGlobals = {rootPath: '/'};
      
   </head>
   <body>
-      <noscript>
-          Javascript needs to be enabled to use this application 
-       </noscript>
+      
     <app-shell unresolved><h2>waiting to load...</h2> </app-shell>
 
   <script src='./wc/webcomponents-loader.js'></script>
@@ -48,7 +46,10 @@ window.AppGlobals = {rootPath: '/'};
             refScript.parentNode.insertBefore(script, refScript);
         }, false);
     })();
-	</script>
+    </script>
+    <noscript>
+        Javascript needs to be enabled to use this application 
+     </noscript>
 </body>
 
 </html>
